@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-import io
 
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.preprocessing import LabelEncoder
@@ -17,26 +16,11 @@ st.title("Analisis Konsumsi Alkohol Mahasiswa (student-por.csv)")
 # ============================
 # LOAD DATASET
 # ============================
-uploaded_file = st.file_uploader("Upload dataset CSV", type=["csv"])
-
-if uploaded_file is not None:
-    try:
-        df = pd.read_csv(
-            io.BytesIO(uploaded_file.getvalue()),
-            sep=None,
-            engine="python"
-        )
-        st.success(f"Dataset {uploaded_file.name} berhasil diunggah.")
-    except (pd.errors.ParserError, UnicodeDecodeError, ValueError) as error:
-        st.error(f"File CSV tidak dapat dibaca: {error}")
-        st.stop()
-else:
-    try:
-        df = pd.read_csv("student-por.csv")
-        st.info("Menggunakan student-por.csv. Upload file CSV untuk memakai dataset lain.")
-    except FileNotFoundError:
-        st.error("File student-por.csv tidak ditemukan. Silakan upload dataset CSV.")
-        st.stop()
+try:
+    df = pd.read_csv("student-por.csv")
+except FileNotFoundError:
+    st.error("File student-por.csv tidak ditemukan.")
+    st.stop()
 
 required_columns = {
     "school", "sex", "address", "famsize", "Pstatus",
